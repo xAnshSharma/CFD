@@ -1,0 +1,31 @@
+using Plots
+
+l = 2
+nx = 101
+dx = l/(nx-1)
+u_max = 2
+c = 1
+dt = (c*dx)/u_max
+nt = 100
+Fo = 0.5
+nu = (Fo * dx^2)/dt
+
+x = LinRange(0,l,nx)
+u = zeros(nx)
+centre = div(nx-1,2)
+range = centre - 5 : centre + 5
+u[range] .= u_max
+
+
+anim = @animate for n in 1:nt
+for i in 2:nx-1
+un = copy(u)
+u[i] = un[i] + ((nu*dt)/(dx^2))*(un[i-1] - 2*un[i] + un[i+1])
+u[1] = 0
+u[end] = 0
+end
+plot(x, u, Title = "Time = $n", xlabel = "X", ylabel = "velocity", color = :coolwarm, ylims=(0,2))
+end
+
+gif(anim, "1D_Diffusion.gif",fps = 30)
+o

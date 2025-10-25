@@ -1,0 +1,40 @@
+using Plots
+
+lx,ly = 2,2
+nx,ny = 201,201
+Fo = 0.1
+u_max,v_max = 4,4
+dx,dy = lx/(nx-1), ly/(ny-1)
+nt = 200
+nu = 1e-4
+dt = (Fo*dx^2)/nu
+
+x,y = LinRange(0,lx,nx),LinRange(0,ly,ny)
+u,v,u_res = zeros(nx,ny),zeros(nx,ny),zeros(nx,ny)
+centre_x,centre_y = div(nx-1,2), div(ny-1,2)
+range_x,range_y = centre_x - 10: centre_x + 10, centre_y -10 : centre_y +10
+u[range_x,range_y] .= u_max
+v[range_x,range_y] .= v_max
+
+anim = @animate for n in 1:nt
+for i in 2:nx-1, j in 2:ny-1
+un = copy(u)
+vn = copy(v)
+u[i,j] = un[i,j] + Fo*(un[i+1,j] + un[i-1,j] + un[i,j+1] + un[i,j-1] -4*un[i,j])
+v[i,j] = vn[i,j] + Fo*(vn[i+1,j] + vn[i-1,j] + vn[i,j+1] + vn[i,j-1] -4*vn[i,j])
+
+u[1,:] .= 0
+u[end,:] .= 0
+u[:,1] .= 0
+u[end,:] .= 0
+
+v[1,:] .= 0
+v[end,:] .= 0
+v[:,1] .= 0
+v[end,:] .= 0
+
+end
+u_res = sqrt.((u.^2) + (v.^2))
+heatmap(y,x,u_res, title = "Time = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
+end
+gif(anim, "2D_diffusion.gif", fps = 30)

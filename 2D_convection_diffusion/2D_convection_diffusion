@@ -1,0 +1,54 @@
+using Plots   #to include contour plots and animations
+
+lx,ly = 2,2   #dimensions of domain
+nx,ny = 201,201   #number of cell nodes in domain
+c = 0.3   #courant number
+Fo = 0.1    #fourier number
+u_max,v_max = 4,4   #disturbance magnitude
+dx,dy = lx/(nx-1), ly/(ny-1)    #distance between cell nodes
+nt = 200    #total number of time steps
+nu = 1e-4   #kinematic viscosity
+dt = min((c*dx)/u_max, (Fo*dx^2)/nu)    #magnitude of time step
+
+x,y = LinRange(0,lx,nx),LinRange(0,ly,ny)   #defining axes
+u,v,u_res = zeros(nx,ny),zeros(nx,ny),zeros(nx,ny)    #initialising velocity fields
+centre_x,centre_y = div(nx-1,2), div(ny-1,2)    #defining central region for disturbance
+range_x,range_y = centre_x - 10: centre_x + 10, centre_y -10 : centre_y +10   #defining spread of disturbance
+u[range_x,range_y] .= u_max    #assigning disturbance for u
+v[range_x,range_y] .= v_max    #assigning disturbance for v
+
+#Solution
+anim = @animate for n in 1:nt
+for i in 2:nx-1, j in 2:ny-1
+
+un = copy(u)
+vn = copy(v)
+
+#Defining fluxes
+F = (u.*u)
+G = (u.*v)
+H = (v.*v)
+u[i,j] = un[i,j] - (dt/dx)*(F[i,j] - F[i-1,j]) - (dt/dx)*(G[i,j] - G[i,j-1]) + Fo*(un[i+1,j] + un[i-1,j] + un[i,j+1] + un[i,j-1] -4*un[i,j])
+v[i,j] = vn[i,j] - (dt/dx)*(G[i,j] - G[i-1,j]) - (dt/dx)*(H[i,j] - H[i,j-1]) + Fo*(vn[i+1,j] + vn[i-1,j] + vn[i,j+1] + vn[i,j-1] -4*vn[i,j])
+
+#Boundary conditions
+
+u[1,:] .= 0   #u at x = 0
+u[end,:] .= 0   #u at x = Lx
+u[:,1] .= 0   #u at y = 0
+u[end,:] .= 0   #u at y = Ly
+
+v[1,:] .= 0   #v at x = 0
+v[end,:] .= 0   #v at x = Lx
+v[:,1] .= 0   #v at y = 0
+v[end,:] .= 0   #v at y = Ly
+
+end
+
+#resultant velocity
+u_res = sqrt.((u.^2) + (v.^2))
+heatmap(y,x,u_res, title = "Time = 0", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
+end
+
+#generating animation
+gif(anim, "2D_convection_diffusion.gif", fps = 30)
