@@ -28,4 +28,3 @@ plot(x, u, Title = "Time = $n", xlabel = "X", ylabel = "velocity", color = :cool
 end
 
 gif(anim, "1D_Diffusion.gif",fps = 30)
-o
