@@ -1,0 +1,29 @@
+using Plots
+
+l = 2
+nx = 101
+dx = l/(nx-1)
+nt = 100
+c = 0.5
+u_max = 2
+dt = (c*dx)/u_max
+
+x = LinRange(0,l,nx)
+centre = div(nx-1,2)
+range = centre - 5: centre + 5
+u = zeros(nx)
+F = zeros(nx)
+u[range] .= u_max
+
+anim = @animate for n in 1:nt
+un = copy(u)
+F = (un.*un)/2
+for i in 2:nx-1
+u[i] = un[i] - (dt/dx)*(F[i] - F[i-1])
+end
+u[1] = 0
+u[end] = 0
+plot(x,u, title = "Time = $n", xlabel = "X", ylabel = "velocity", ylims = (0,2))
+end
+
+gif(anim,"1D_convection.gif",fps = 30)

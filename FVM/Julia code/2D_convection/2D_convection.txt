@@ -1,0 +1,42 @@
+using Plots
+
+lx,ly = 2,2
+nx,ny = 201,201
+c = 0.3
+u_max,v_max = 4,4
+dx,dy = lx/(nx-1), ly/(ny-1)
+nt = 200
+dt = min((c*dx)/u_max, (c*dy)/v_max)
+
+x,y = LinRange(0,lx,nx),LinRange(0,ly,ny)
+u,v,u_res = zeros(nx,ny),zeros(nx,ny),zeros(nx,ny)
+centre_x,centre_y = div(nx-1,2), div(ny-1,2)
+range_x,range_y = centre_x - 10: centre_x + 10, centre_y - 10 : centre_y + 10 
+u[range_x,range_y] .= u_max
+v[range_x,range_y] .= v_max
+
+anim = @animate for n in 1:nt
+for i in 2:nx-1, j in 2:ny-1
+un = copy(u)
+vn = copy(v)
+F = (u.*u)
+G = (u.*v)
+H = (v.*v)
+u[i,j] = un[i,j] - (dt/dx)*(F[i,j] - F[i-1,j]) - (dt/dx)*(G[i,j] - G[i,j-1])
+v[i,j] = vn[i,j] - (dt/dx)*(G[i,j] - G[i-1,j]) - (dt/dx)*(H[i,j] - H[i,j-1])
+
+u[1,:] .= 0
+u[end,:] .= 0
+u[:,1] .= 0
+u[end,:] .= 0
+
+v[1,:] .= 0
+v[end,:] .= 0
+v[:,1] .= 0
+v[end,:] .= 0
+
+end
+u_res = sqrt.((u.^2) + (v.^2))
+heatmap(y,x,u_res, title = "Time = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
+end
+gif(anim, "2D_convection.gif", fps = 30)
