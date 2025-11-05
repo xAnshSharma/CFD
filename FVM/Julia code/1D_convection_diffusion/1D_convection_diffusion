@@ -1,4 +1,4 @@
-#using Plots
+using Plots
 
 l = 2
 nx = 101
@@ -10,11 +10,11 @@ nt = 100
 nu = 1e-6
 
 x = LinRange(0,l,nx)
-centre = div(nx-1,2)
-range = centre - 5 : centre + 5
-u = zeros(nx)
+centre = l/2  #centre of domain
+width = 0.2   #spread of wave
+amplitude = 1.0  #amplitude added to u = 1
+u = zeros(nx) + amplitude .* exp.(-(x .- centre).^2 / (2 * width^2))
 F = zeros(nx)
-u[range] .= u_max
 
 anim = @animate for n in 1:nt
 for i in 2:nx-1
