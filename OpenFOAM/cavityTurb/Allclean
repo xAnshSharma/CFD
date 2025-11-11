@@ -1,0 +1,21 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. "${WM_PROJECT_DIR:?}"/bin/tools/CleanFunctions    # Tutorial clean functions
+#------------------------------------------------------------------------------
+
+
+foamListTimes -rm
+rm -rf 0
+cp -r 0.orig 0
+rm -rf log.blockMesh
+rm -rf log.pimpleFoam
+rm -rf log.checkMesh
+rm -rf log.setFields
+rm -rf log.funkySetFields
+rm -rf cavityTurb.foam
+
+echo "Case cleaned!"
+
+#------------------------------------------------------------------------------
+
+
