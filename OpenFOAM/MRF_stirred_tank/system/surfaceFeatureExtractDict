@@ -1,0 +1,51 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  2406
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+// --- 1. Mug Body ---
+impeller.stl
+{
+extractionMethod extractFromSurface;
+extractFromSurfaceCoeffs
+{
+includedAngle 150;
+}
+subsetFeatures
+{
+nonManifoldEdges yes; // Useful for complex geometry like the mug body
+openEdges yes;
+}
+writeObj yes; // Optional: Writes out the features as an .obj file for viewing
+outputFile "impeller.eMesh"; // Essential for snappyHexMesh reference
+}
+
+// --- 2. Mug Lid (Hot Surface) ---
+vessel.stl
+{
+extractionMethod extractFromSurface;
+extractFromSurfaceCoeffs
+{
+includedAngle 150;
+}
+subsetFeatures
+{
+nonManifoldEdges no; // Not needed for a simple lid face
+openEdges yes;
+}
+writeObj yes;
+outputFile "vessel.eMesh"; // Essential for snappyHexMesh reference
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
