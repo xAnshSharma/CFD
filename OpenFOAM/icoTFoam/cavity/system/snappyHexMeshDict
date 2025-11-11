@@ -1,0 +1,181 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  2406
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+castellatedMesh true;
+snap            true;
+addLayers       true;
+
+geometry
+{
+	mug_body.stl
+	{
+	    type              triSurfaceMesh;
+	    name              coffeeMug; // This will become the default mug boundary
+	    region            outside; // Fluid domain is outside the geometry
+	}
+
+	// 2. Mug Lid (The Hot Surface)
+	mug_lid.stl
+	{
+		type              triSurfaceMesh;
+		name              hotSurface; // The desired hot surface patch
+		region            outside; // Fluid domain is outside the geometry
+	}
+    
+    refinementBox
+    {
+        type searchableBox;
+        min (0.0025 0.001 0);
+        max ( 0.0125  0.007 0.0001);
+    }
+    
+    wakeRefinementBox
+    {
+        type searchableBox;
+        min (0.0025 0.007 0);
+        max (0.0125 0.01 0.0001);
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells 100000;
+    maxGlobalCells 2000000;
+    minRefinementCells 0;
+    maxLoadUnbalance 0.10;
+    nCellsBetweenLevels 1;
+
+    features
+    (
+    {
+        file "mug_body.eMesh";
+        level 2; // Safer level for 2D geometry
+    }
+    {
+        file "mug_lid.eMesh";
+        level 2; // Safer level for 2D geometry
+    }
+    );
+
+    refinementSurfaces
+    {
+        coffeeMug
+    {
+        level (1 2); // REDUCED: Safer transition from level 1 to max level 2
+        patchInfo
+        {
+            type wall;
+        }
+    }
+    hotSurface
+    {
+        level (1 1); // REDUCED: Safer transition from level 1 to max level 2
+        patchInfo
+        {
+            type wall;
+        }
+    }
+    }
+
+    resolveFeatureAngle 30;
+
+    refinementRegions
+    {
+        refinementBox
+        {
+            mode inside;
+            levels ((1 1));
+        }
+        
+        wakeRefinementBox
+        {
+            mode inside;
+            levels ((1 1));
+        }
+    }
+
+    locationInMesh (0.005 0.001 0);
+    allowFreeStandingZoneFaces true;
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 100;
+    nRelaxIter 5;
+    nFeatureSnapIter 10;
+    implicitFeatureSnap false;
+    explicitFeatureSnap true;
+    multiRegionFeatureSnap false;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+
+    layers
+    {
+        coffeeMug
+        {
+            nSurfaceLayers 2;
+        }
+        hotSurface
+        {
+        	nSurfaceLayers 2;
+        }
+    }
+    minMedialAxisAngle 90;
+    expansionRatio 1.2;
+    finalLayerThickness 0.5;
+    minThickness 0.1;
+    nGrow 0;
+    featureAngle 130;
+    slipFeatureAngle 30;
+    nRelaxIter 20;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedianAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+
+meshQualityControls
+{
+    maxNonOrtho 75;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVol 1e-13;
+    minTetQuality 1e-15;
+    minArea -1;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.05;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    minFlatness 0.5;
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+debug 0;
+
+mergeTolerance 1e-6;
+
+// ************************************************************************* //

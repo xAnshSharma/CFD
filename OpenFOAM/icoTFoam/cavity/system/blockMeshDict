@@ -1,0 +1,88 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001; // Geometry dimensions are in mm
+
+// Define coordinates for the bounding box.
+// X and Y are large (100mm), Z is very thin (1mm).
+vertices
+(
+// Base plane (Z = 0)
+(0 0 0) // 0
+( 14 0 0) // 1
+( 14  12 0) // 2
+(0  12 0) // 3
+
+// Top plane (Z = 1)
+(0 0 0.1) // 4
+( 14 0 0.1) // 5
+( 14  12 0.1) // 6
+(0  12 0.1) // 7
+
+);
+
+// Define the single block
+blocks
+(
+hex (0 1 2 3 4 5 6 7) (30 30 1) simpleGrading (1 1 1)
+);
+
+// Define the boundaries (patches) of the background mesh
+boundary
+(
+
+top
+{
+    type patch;
+    faces
+    (
+        (3 2 7 6)
+    );
+}
+
+// Bottom boundary
+bottom
+{
+    type patch;
+    faces
+    (
+        (0 1 5 4)
+    );
+}
+
+// Left boundary
+left
+{
+    type patch;
+    faces
+    (
+        (3 0 4 7)
+    );
+}
+
+// Right boundary
+right
+{
+    type patch;
+    faces
+    (
+        (1 2 6 5)
+    );
+}
+
+);
+
+// ************************************************************************* //

@@ -1,0 +1,27 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. "${WM_PROJECT_DIR:?}"/bin/tools/RunFunctions      # Tutorial run functions
+#------------------------------------------------------------------------------
+
+echo "Creating background mesh..."
+runApplication blockMesh
+
+echo "Creating surface features..."
+runApplication surfaceFeatureExtract
+
+# Generate surface mesh with snappyHexMesh
+echo "Running snappyHexMesh..."
+runApplication snappyHexMesh -overwrite
+
+# Check mesh quality
+echo "Checking mesh quality..."
+runApplication checkMesh
+
+# Run the simulation
+echo "Running icoTFoam solver..."
+runApplication icoTFoam
+
+echo "Case completed successfully!"
+echo "Results can be viewed using: paraFoam"
+
+#------------------------------------------------------------------------------
