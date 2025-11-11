@@ -1,0 +1,38 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. "${WM_PROJECT_DIR:?}"/bin/tools/RunFunctions      # Tutorial run functions
+#------------------------------------------------------------------------------
+
+# Generate NACA0018 STL file
+echo "Generating NACA0018 STL file..."
+python3 naca0018_generator.py
+
+# Move STL file to correct location
+mkdir -p constant/triSurface
+mv naca0018.stl constant/triSurface/
+
+# Generate background mesh
+echo "Creating background mesh..."
+runApplication blockMesh
+
+# Generate surface mesh with snappyHexMesh
+echo "Running snappyHexMesh..."
+runApplication snappyHexMesh -overwrite
+
+# Check mesh quality
+echo "Checking mesh quality..."
+runApplication checkMesh
+
+# Initialize fields
+echo "Initializing flow fields..."
+runApplication potentialFoam
+sleep 1
+
+# Run the simulation
+echo "Running icoFoam solver..."
+runApplication icoFoam
+
+echo "Case completed successfully!"
+echo "Results can be viewed using: paraFoam"
+
+#------------------------------------------------------------------------------
