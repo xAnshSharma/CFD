@@ -1,0 +1,196 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale     1;
+
+vertices 
+(  
+	//cylinderFront	
+  (-0.7071 -0.7071 0) 		//0
+  (0.7071 -0.7071 0) 		//1
+  (0.7071 0.7071 0) 		//2
+  (-0.7071 0.7071 0) 		//3
+  	
+  	//cylinderSurroundingFront
+  (-3.5 -3.5 0) 		//4
+  (3.5 -3.5 0) 			//5
+  (3.5 3.5 0) 			//6
+  (-3.5 3.5 0) 			//7
+  
+  	//bottomFront
+  (-11 -11 0)			//8
+  (-3.5 -11 0)			//9
+  (3.5 -11 0)			//10
+  (5 -11 0)			//11
+  (21 -11 0)			//12
+  
+  	//midLowFront
+  (-11 -3.5 0)			//13
+  (5 -3.5 0)			//14
+  (21 -3.5 0)			//15
+  
+  	//midHighFront
+  (-11 3.5 0)			//16
+  (5 3.5 0)			//17
+  (21 3.5 0)			//18
+  
+  	//topFront
+  (-11 11 0)			//19
+  (-3.5 11 0)			//20
+  (3.5 11 0)			//21
+  (5 11 0)			//22
+  (21 11 0)			//23
+  
+  	//cylinderBack
+  (-0.7071 -0.7071 0.1) 	//24
+  (0.7071 -0.7071 0.1) 		//25
+  (0.7071 0.7071 0.1) 		//26
+  (-0.7071 0.7071 0.1) 		//27
+  
+  	//cylinderSurroundingBack
+  (-3.5 -3.5 0.1) 		//28
+  (3.5 -3.5 0.1) 		//29
+  (3.5 3.5 0.1) 		//30
+  (-3.5 3.5 0.1) 		//31
+  
+  	//bottomBack
+  (-11 -11 0.1)			//32
+  (-3.5 -11 0.1)		//33
+  (3.5 -11 0.1)			//34
+  (5 -11 0.1)			//35
+  (21 -11 0.1)			//36
+  
+  	//midLowBack
+  (-11 -3.5 0.1)		//37
+  (5 -3.5 0.1)			//38
+  (21 -3.5 0.1)			//39
+  
+  	//midHighBack
+  (-11 3.5 0.1)			//40
+  (5 3.5 0.1)			//41
+  (21 3.5 0.1)			//42
+  
+  	//topBack
+  (-11 11 0.1)			//43
+  (-3.5 11 0.1)			//44
+  (3.5 11 0.1)			//45
+  (5 11 0.1)			//46
+  (21 11 0.1)			//47
+  
+);
+
+
+blocks
+(
+ hex (0 4 5 1 24 28 29 25) (30 30 1) simpleGrading (1 1 1) //circSurrDown
+ hex (1 5 6 2 25 29 30 26) (30 30 1) simpleGrading (1 1 1) //circSurrRight
+ hex (2 6 7 3 26 30 31 27) (30 30 1) simpleGrading (1 1 1) //circSurrUp
+ hex (3 7 4 0 27 31 28 24) (30 30 1) simpleGrading (1 1 1) //circSurrLeft
+ 
+ hex (8 9 4 13 32 33 28 37) (20 15 1) simpleGrading (0.137412 0.0914 1) //bottomLeft
+ hex (9 10 5 4 33 34 29 28) (30 15 1) simpleGrading (1 0.0914 1) //bottom1
+ hex (10 11 14 5 34 35 38 29) (10 15 1) simpleGrading (1.615 0.0914 1) //bottom2
+ hex (11 12 15 14 35 36 39 38) (45 15 1) simpleGrading (3.1745 0.0914 1) //bottomRight
+ hex (5 14 17 6 29 38 41 30) (10 30 1) simpleGrading (1.615 1 1) //mid1
+ 
+ hex (14 15 18 17 38 39 42 41) (45 30 1) simpleGrading (3.1745 1 1) //midRight
+ hex (17 18 23 22 41 42 47 46) (45 15 1) simpleGrading (3.1745 10.94 1) //topRight
+ hex (6 17 22 21 30 41 46 45) (10 15 1) simpleGrading (1.615 10.94 1) //topLeft2
+ hex (7 6 21 20 31 30 45 44) (30 15 1) simpleGrading (1 10.94 1) //topLeft1
+ hex (16 7 20 19 40 31 44 43) (20 15 1) simpleGrading (0.137412 10.94 1) //topLeft
+ 
+ hex (13 4 7 16 37 28 31 40) (20 30 1) simpleGrading (0.137412 1 1) //midLeft
+ 
+ 
+);
+
+edges
+(
+    arc 0 1 (0 -1 0) //downFront
+    arc 24 25 (0 -1 0.1) //downBack
+    
+    arc 1 2 (1 0 0) //rightFront
+    arc 25 26 (1 0 0.1) //rightBack
+    
+    arc 2 3 (0 1 0) //upFront
+    arc 26 27 (0 1 0.1) //upBack
+    
+    arc 3 0 (-1 0 0) //leftFront
+    arc 27 24 (-1 0 0.1) //leftBack
+);
+
+boundary
+(
+
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (8 32 37 13)	//inletLow
+            (13 37 40 16)	//inletMid	
+            (16 40 43 19)	//inletHigh
+        );
+    }
+    
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (12 15 39 36)	//outletLow
+            (15 18 42 39)	//outletMid
+            (18 23 47 42)	//outletHigh
+        );
+    }
+
+    topAndBottom
+    {
+        type wall;
+        faces
+        (
+            (43 44 20 19)	//topLeft
+            (44 45 21 20)	//topMid1
+            (45 46 22 21)	//topMid2
+            (46 47 23 22)	//topRight
+            
+            (8 9 33 32)		//bottomLeft
+            (9 10 34 33)	//bottomMid1
+            (10 11 35 34)	//bottomMid2
+            (11 12 36 35)    	//bottomRight
+        );
+      
+    }
+    
+    cylinder
+    {
+        type wall;
+        faces
+        (
+            (24 25 1 0)		//circDown
+            (2 1 25 26)		//circRight
+            (3 2 26 27)		//circUp
+            (3 27 24 0)		//circLeft
+        );
+    }
+    
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
