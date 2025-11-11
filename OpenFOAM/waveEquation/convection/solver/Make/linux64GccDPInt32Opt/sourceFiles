@@ -1,0 +1,4 @@
+SOURCE = \
+icoWFoam.C \
+
+# sources
