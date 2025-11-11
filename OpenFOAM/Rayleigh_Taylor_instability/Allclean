@@ -1,0 +1,25 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. "${WM_PROJECT_DIR:?}"/bin/tools/CleanFunctions    # Tutorial clean functions
+#------------------------------------------------------------------------------
+
+
+foamListTimes -rm
+rm -rf 0
+cp -r 0.orig 0
+rm -rf log.blockMesh
+rm -rf log.interFoam
+rm -rf log.checkMesh
+rm -rf log.setFields
+rm -rf Rayleigh_Taylor_instability.foam
+#rm -rf processor0
+#rm -rf processor1
+#rm -rf processor2
+#rm -rf processor3
+
+
+echo "Case cleaned!"
+
+#------------------------------------------------------------------------------
+
+

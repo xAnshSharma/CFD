@@ -1,0 +1,24 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. "${WM_PROJECT_DIR:?}"/bin/tools/RunFunctions      # Tutorial run functions
+#------------------------------------------------------------------------------
+
+echo "Creating background mesh..."
+runApplication blockMesh
+
+# Generate volume using setFields
+echo "Running setFields..."
+runApplication setFields
+
+# Check mesh quality
+echo "Checking mesh quality..."
+runApplication checkMesh
+
+# Run the simulation
+echo "Running interFoam solver..."
+runApplication interFoam
+
+echo "Case completed successfully!"
+echo "Results can be viewed using: paraFoam"
+
+#------------------------------------------------------------------------------
