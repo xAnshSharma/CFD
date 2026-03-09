@@ -104,7 +104,7 @@ u[:,end] .= 0   #u at y = Ly
 v[1,:] .= 0   #v at x = 0
 v[end,:] .= 0   #v at x = Lx
 v[:,1] .= 0   #v at y = 0
-v[end,:] .= 0   #v at y = Ly
+v[:,end] .= 0   #v at y = Ly
 
 end
 
