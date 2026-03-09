@@ -143,9 +143,6 @@ v_2 = copy(v)
 u_3 = copy(u)
 v_3 = copy(v)
 
-file = open("simulation_data_3.csv", "w")
-println(file, "time,KE,u_max")
-
 #Main simulation
 anim = @animate for n in 1:nt
 un = copy(u)
@@ -214,26 +211,10 @@ global total_time += dt	#computing total simulated time
 BC(u,v)
 u_res .= sqrt.(u.^2 .+ v.^2)	#resultant velocity
 heatmap(y,x,u_res, title = "Time = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-KE = 0.5 * sum(u.^2 + v.^2) * dx * dy
 u_max = maximum(abs.(u))
-println("KE:", KE,"  at --> n:  ", n)
 println("max u:", u_max,"  at --> n:  ", n)	#shows variation of u_max throughout simulation to check for blowups
-println(file, "$total_time,$KE,$u_max")
-
-if n == 300
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"300_Time_4.png")
-elseif n == 600
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"600_Time_4.png")
-elseif n == 900
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"900_Time_4.png")
-else
-end
 
 end
 println("total time:", total_time)
-close(file)
 #Animation
 gif(anim, "2D_convection_diffusion_4O'U_RK4.gif", fps = 30)
