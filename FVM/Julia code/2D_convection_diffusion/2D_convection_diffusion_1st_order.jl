@@ -1,7 +1,7 @@
 # ======================================================================
 # This solver solves 2D viscid burger's equation using FVM
 # It uses 1st and 2nd order schemes to discretize various terms in the burger's equation
-# Temporal term : 1st orderExplicit Euler scheme
+# Temporal term : 1st order Explicit Euler scheme
 # Advective term: 1st Order UPWIND scheme
 # DIffusion term: 2nd order Central Difference Scheme
 # ======================================================================
