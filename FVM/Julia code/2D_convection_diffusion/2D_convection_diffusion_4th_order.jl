@@ -112,16 +112,16 @@ end
 function BC(u,v)
 
 u[1:3,:] .= 0	#u near x = 0
-u[end-2:end,:] .= 0	#u near x = L
+u[end-2:end,:] .= 0	#u near x = Lx
 
 u[:,1:3] .= 0	#u near y = 0
-u[:,end-2:end] .= 0	#u near y = L
+u[:,end-2:end] .= 0	#u near y = Ly
 
 v[1:3,:] .= 0	#v near x = 0
-v[end-2:end,:] .= 0	#v near x = L
+v[end-2:end,:] .= 0	#v near x = Lx
 
 v[:,1:3] .= 0	#v near y = 0
-v[:,end-2:end] .= 0	#v near y = L
+v[:,end-2:end] .= 0	#v near y = Ly
 
 end
 
