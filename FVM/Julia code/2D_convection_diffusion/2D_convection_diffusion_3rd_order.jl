@@ -255,7 +255,7 @@ global total_time += dt	#compute total simulated time
 u_res .= sqrt.(u.^2 .+ v.^2)	#resultant velocity
 heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
 u_max = maximum(abs.(u))
-println("max u:", u_max,"  at --> n:  ", n)
+println("max u:", u_max,"  at --> n:  ", n)    #shows variation of u_max throughout simulation to check for blowups
 
 end
 #Animation
