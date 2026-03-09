@@ -1,4 +1,4 @@
-using Plots
+using Plots    #to generate plots and gif
 
 lx,ly = 2,2	#Defining extent of domain
 nx,ny = 401,401		#number of nodes in each direction in domain
@@ -8,7 +8,7 @@ dx,dy = lx/(nx-1), ly/(ny-1)
 nt = 1000	#total number of time steps
 nu = 1e-3	#kinematic viscosity
 Fo = 0.1	#Fourier number
-total_time = 0
+total_time = 0    #total simulated time
 
 x,y = LinRange(0, lx, nx),LinRange(0, ly, ny)	#Defining axes
 u,v,u_res = zeros(nx,ny),zeros(nx,ny),zeros(nx,ny)    #initialising velocity fields
@@ -198,9 +198,6 @@ v_1 = copy(v)
 u_2 = copy(u)
 v_2 = copy(v)
 
-file = open("simulation_data_2.csv", "w")
-println(file, "time,KE,u_max")
-
 #Main simulation
 anim = @animate for n in 1:nt
 un = copy(u)
@@ -257,25 +254,9 @@ BC(u,v)
 global total_time += dt	#compute total simulated time
 u_res .= sqrt.(u.^2 .+ v.^2)	#resultant velocity
 heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-KE = 0.5 * sum(u.^2 + v.^2) * dx * dy
 u_max = maximum(abs.(u))
-println("KE:", KE,"  at --> n:  ", n)
 println("max u:", u_max,"  at --> n:  ", n)
-println(file, "$total_time,$KE,$u_max")
-
-if n == 300
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"300_Time_3.png")
-elseif n == 600
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"600_Time_3.png")
-elseif n == 900
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"900_Time_3.png")
-else
-end
 
 end
-close(file)
 #Animation
 gif(anim, "2D_convection_diffusion_SMART_RK3.gif", fps = 30)
