@@ -186,19 +186,19 @@ end
 #Defining boundary conditions
 function BC(u,v)
 
-u[1:2,:] .= 0	#u at x = 0,1
+u[1:2,:] .= 0	#u near x = 0
 u[end-1,:] .= u[end-2,:]	#neumen condn for o/p
 u[end,:] .= u[end-1,:]
 
-u[:,1:2] .= 0	#u at y = 0,1
+u[:,1:2] .= 0	#u near y = 0
 u[:,end] .= u[:,end-1]	#neumen condn for o/p
 u[:,end-1] .= u[:,end-2]
 
-v[1:2,:] .= 0	#v at x = 0,1
+v[1:2,:] .= 0	#v near x = 0
 v[end-1,:] .= v[end-2,:]	#neumen condn for o/p	
 v[end,:] .= v[end-1,:]
 
-v[:,1:2] .= 0	#v at y = 0,1
+v[:,1:2] .= 0	#v near y = 0
 v[:,end-1] .= v[:,end-2]	#neumen cond for o/p
 v[:,end] .= v[:,end-1]
 
@@ -268,5 +268,6 @@ u_max = maximum(abs.(u))
 println("max u:", u_max,"  at --> n:  ", n)    #shows variation of u_max throughout simulation to check for blowups
 
 end
+println("total time:", total_time)
 #Animation
 gif(anim,"2D_Burger's_MUSCL_RK2.gif",fps = 30)
