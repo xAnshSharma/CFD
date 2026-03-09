@@ -171,17 +171,17 @@ end
 #Defining Boundary conditions
 function BC(u,v)
 
-u[1:3,:] .= 0	#u at x = 0,1,2
-u[end-2:end,:] .= 0	#u at x = 399,400,401
+u[1:3,:] .= 0	#u near x = 0
+u[end-2:end,:] .= 0	#u near x = L
 
-u[:,1:3] .= 0	#u at y = 0,1,2
-u[:,end-2:end] .= 0	#u at y = 399,400,401
+u[:,1:3] .= 0	#u near y = 0
+u[:,end-2:end] .= 0	#u near y = L
 
-v[1:3,:] .= 0	#v at x = 0,1,2
-v[end-2:end,:] .= 0	#u at v = 399,400,401
+v[1:3,:] .= 0	#v near x = 0
+v[end-2:end,:] .= 0	#u near v = L
 
-v[:,1:3] .= 0	#v at y = 0,1,2
-v[:,end-2:end] .= 0	#v at y = 399,400,401
+v[:,1:3] .= 0	#v near y = 0
+v[:,end-2:end] .= 0	#v near y = L
 
 end
 
@@ -258,5 +258,6 @@ u_max = maximum(abs.(u))
 println("max u:", u_max,"  at --> n:  ", n)    #shows variation of u_max throughout simulation to check for blowups
 
 end
+println("total time:", total_time)
 #Animation
 gif(anim, "2D_convection_diffusion_SMART_RK3.gif", fps = 30)
