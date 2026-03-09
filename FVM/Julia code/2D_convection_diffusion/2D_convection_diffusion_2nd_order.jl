@@ -1,8 +1,3 @@
-#adding plots from package to use later for animations
-
-#using Pkg
-#Pkg.add("Plots")
-
 # ======================================================================
 # This solver solves 2D viscid burger's equation using FVM
 # It uses 2nd order schemes to discretize various terms in the burger's equation
@@ -21,7 +16,7 @@ Fo = 0.1	#fourier number
 nu = 1e-3	#kinematic viscosity
 u_amp,v_amp = 1,1	#disturbance amplitude
 nt = 1000	#total number of time steps
-total_time = 0
+total_time = 0    #total simulated time 
 
 x,y = LinRange(0,lx,nx),LinRange(0,ly,ny)   #defining axes
 u,v,u_res = zeros(nx,ny),zeros(nx,ny),zeros(nx,ny)    #initialising velocity fields
@@ -226,9 +221,6 @@ end
 Ru = zeros(nx,ny)
 Rv = zeros(nx,ny)
 
-file = open("simulation_data_1.csv", "w")
-println(file, "time,KE,u_max")
-
 #Main simulation
 anim = @animate for n in 1:nt
 #Define maximum velocity in each direction
@@ -268,32 +260,13 @@ v[i,j] = 0.5*(vn[i,j] + v_star[i,j] + dt*Rv_star)
 
 end
 end
-global total_time += dt
+global total_time += dt    #to compute the total simulated time
 BC(u,v)
 u_res .= sqrt.(u.^2 .+ v.^2)	#Compute resultant velocity
 heatmap(y,x,u_res, title = "Time step = $n",xlabel = "x position", ylabel = "y position", legend = false)
-KE = 0.5 * sum(u.^2 + v.^2) * dx * dy
 u_max = maximum(abs.(u))
-println("KE:", KE,"  at --> n:  ", n)
-println("max u:", u_max,"  at --> n:  ", n)
-println(file, "$total_time,$KE,$u_max")
-
-if n == 1
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"inTime_2.png")
-elseif n == 300
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"300_Time_2.png")
-elseif n == 600
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"600_Time_2.png")
-elseif n == 900
-p = heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend = false, xlims = (0,lx), ylims = (0,ly))
-savefig(p,"900_Time_2.png")
-else
-end
+println("max u:", u_max,"  at --> n:  ", n)    #shows variation of u_max throughout simulation to check for blowups
 
 end
-close(file)
 #Animation
 gif(anim,"2D_Burger's_MUSCL_RK2.gif",fps = 30)
