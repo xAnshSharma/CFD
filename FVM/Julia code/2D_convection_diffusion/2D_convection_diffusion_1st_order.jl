@@ -142,6 +142,6 @@ heatmap(y,x,u_res, title = "Time step = $n", xlabel = "X", ylabel = "Y", legend 
 u_max = maximum(abs.(u))
 println("max u:", u_max,"  at --> n:  ", n)  #shows variation of u_max throughout simulation to check for blowups
 end
-
+println("total time:", total_time)
 #generating animation
 gif(anim, "2D_convection_diffusion.gif", fps = 30)
