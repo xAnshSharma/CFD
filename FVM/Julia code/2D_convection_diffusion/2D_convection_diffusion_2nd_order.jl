@@ -187,20 +187,16 @@ end
 function BC(u,v)
 
 u[1:2,:] .= 0	#u near x = 0
-u[end-1,:] .= u[end-2,:]	#neumen condn for o/p
-u[end,:] .= u[end-1,:]
+u[end-1:end,:] .= 0	#u near x = Lx
 
 u[:,1:2] .= 0	#u near y = 0
-u[:,end] .= u[:,end-1]	#neumen condn for o/p
-u[:,end-1] .= u[:,end-2]
+u[:,end-1:end] .= 0	#u near y = Ly
 
 v[1:2,:] .= 0	#v near x = 0
-v[end-1,:] .= v[end-2,:]	#neumen condn for o/p	
-v[end,:] .= v[end-1,:]
+v[end-1:end,:] .= 0	#v near x = Lx	
 
 v[:,1:2] .= 0	#v near y = 0
-v[:,end-1] .= v[:,end-2]	#neumen cond for o/p
-v[:,end] .= v[:,end-1]
+v[:,end-1:end] .= 0	#v near y = Ly
 
 end
 
