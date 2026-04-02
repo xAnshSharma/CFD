@@ -24,7 +24,7 @@ sigma = 0.1	#spread of gaussian pulse
 end
 end
 
-function convective(un,vn,i,j,dx)
+function convective(un,vn,i,j,dx,dy)
 
 F_e = un[i+1,j]^2
 F_w = un[i-1,j]^2
@@ -35,7 +35,7 @@ G_s = vn[i,j-1]*un[i,j-1]
 G_e = un[i+1,j]*vn[i+1,j]
 G_w = un[i-1,j]*vn[i-1,j]
 
-H_n = vn[i.j+1]^2
+H_n = vn[i,j+1]^2
 H_s = vn[i,j-1]^2
 
 conv_u = -((1/dx)*(F_e - F_w)) - ((1/dy)*(G_n - G_s))
@@ -43,7 +43,7 @@ conv_v = -((1/dx)*(G_e - G_w)) - ((1/dy)*(H_n - H_s))
 return conv_u,conv_v
 end
 
-function BC(u)
+function BC(u,v)
 u[1,:] .= 0
 u[end,:] .= 0
 u[:,1] .= 0
